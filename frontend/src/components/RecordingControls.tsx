@@ -3,13 +3,14 @@
 import { invoke } from '@tauri-apps/api/core';
 import { appDataDir } from '@tauri-apps/api/path';
 import { useCallback, useEffect, useState, useRef } from 'react';
-import { Play, Pause, Square, Mic, AlertCircle, X } from 'lucide-react';
+import { Play, Pause, Square, Mic, AlertCircle, X, Globe } from 'lucide-react';
 import { ProcessRequest, SummaryResponse } from '@/types/summary';
 import { listen } from '@tauri-apps/api/event';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import Analytics from '@/lib/analytics';
 import { useRecordingState } from '@/contexts/RecordingStateContext';
+import { useConfig } from '@/contexts/ConfigContext';
 
 interface RecordingControlsProps {
   isRecording: boolean;
@@ -26,6 +27,9 @@ interface RecordingControlsProps {
     systemDevice: string | null;
   };
   meetingName?: string;
+  // Opens the language settings modal; shown next to the record button
+  // so the transcription language can be picked right before recording.
+  onLanguageClick?: () => void;
 }
 
 export const RecordingControls: React.FC<RecordingControlsProps> = ({
@@ -40,10 +44,15 @@ export const RecordingControls: React.FC<RecordingControlsProps> = ({
   isParentProcessing,
   selectedDevices,
   meetingName,
+  onLanguageClick,
 }) => {
   // Use global recording state context for pause state (syncs with tray operations)
   const recordingState = useRecordingState();
   const isPaused = recordingState.isPaused;
+  const { selectedLanguage } = useConfig();
+  const languageLabel = !selectedLanguage || selectedLanguage.startsWith('auto')
+    ? 'Auto'
+    : selectedLanguage.toUpperCase();
 
   const [showPlayback, setShowPlayback] = useState(false);
   const [recordingPath, setRecordingPath] = useState<string | null>(null);
@@ -388,7 +397,27 @@ export const RecordingControls: React.FC<RecordingControlsProps> = ({
               ) : (
                 <>
                   {!isRecording ? (
-                    // Start recording button
+                    // Language picker + start recording button
+                    <>
+                    {onLanguageClick && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => {
+                              Analytics.trackButtonClick('language_settings', 'recording_controls');
+                              onLanguageClick();
+                            }}
+                            className="h-10 px-3 flex items-center justify-center space-x-1 bg-white border-2 border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50 rounded-full transition-colors"
+                          >
+                            <Globe size={16} />
+                            <span className="text-xs font-medium">{languageLabel}</span>
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Transcription language</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <button
@@ -411,6 +440,7 @@ export const RecordingControls: React.FC<RecordingControlsProps> = ({
                         <p>Start recording</p>
                       </TooltipContent>
                     </Tooltip>
+                    </>
                   ) : (
                     // Recording controls (pause/resume + stop)
                     <>

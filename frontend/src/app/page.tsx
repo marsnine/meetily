@@ -246,6 +246,7 @@ export default function Home() {
                       isParentProcessing={isProcessingStop}
                       selectedDevices={selectedDevices}
                       meetingName={meetingTitle}
+                      onLanguageClick={() => showModal('languageSettings')}
                     />
                   </div>
                 </div>
