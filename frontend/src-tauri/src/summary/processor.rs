@@ -121,7 +121,35 @@ pub(crate) fn language_name_from_code(code: &str) -> Option<&'static str> {
     }
 }
 
+/// User-provided domain vocabulary (set via set_transcription_vocabulary), rendered as a
+/// glossary instruction so ASR misrecognitions of known terms are normalized during
+/// summarization/translation instead of propagating into the final report.
+fn vocabulary_glossary() -> Option<String> {
+    let vocab = crate::get_transcription_vocabulary_internal()?;
+    let vocab = vocab.trim().to_string();
+    if vocab.is_empty() {
+        None
+    } else {
+        Some(vocab)
+    }
+}
+
+fn glossary_instruction_for_summary() -> String {
+    match vocabulary_glossary() {
+        Some(vocab) => format!(
+            "\n\nKnown domain terms (the transcript was produced by speech recognition and may contain phonetic misspellings of these; when the context clearly refers to one of them, use this canonical spelling): {vocab}"
+        ),
+        None => String::new(),
+    }
+}
+
 fn translation_system_prompt(target_language: &str) -> String {
+    let glossary_rule = match vocabulary_glossary() {
+        Some(vocab) => format!(
+            "\n7. The document may mention these canonical domain terms; keep them EXACTLY as written here (do not translate or alter them): {vocab}"
+        ),
+        None => String::new(),
+    };
     format!(
         r#"You are a precise translator. Translate the provided Markdown document into {target_language} while preserving structure exactly.
 
@@ -130,19 +158,22 @@ fn translation_system_prompt(target_language: &str) -> String {
 2. Preserve the Markdown structure EXACTLY: keep every `#`, `**`, `-`, `|`, code fence marker, and table pipe in the same position.
 3. Do NOT translate: proper nouns (names of people, products, companies), code identifiers, file paths, URLs, numeric values, or text inside backticks.
 4. Do not add commentary or explanation. Output ONLY the translated Markdown.
-5. If a technical term has no standard translation, keep the original English word."#
+5. If a technical term has no standard translation, keep the original English word. Apart from such terms, output text ONLY in {target_language} — never emit characters from any other script (e.g. no Chinese characters in a Korean translation).
+6. Numbers and amounts must keep their exact magnitude. When converting number words into another language's numbering units (e.g. English "billion" into Korean 억/조), re-check the conversion digit by digit — a 10x error is unacceptable.{glossary_rule}"#
     )
 }
 
 fn build_chunk_summary_user_prompt(chunk: &str) -> String {
+    let glossary = glossary_instruction_for_summary();
     format!(
-        "{ENGLISH_BASE_SUMMARY_INSTRUCTION}\n\nProvide a concise but comprehensive summary of the following transcript chunk. Capture all key points, decisions, action items, and mentioned individuals.\n\n<transcript_chunk>\n{chunk}\n</transcript_chunk>"
+        "{ENGLISH_BASE_SUMMARY_INSTRUCTION}{glossary}\n\nProvide a concise but comprehensive summary of the following transcript chunk. Capture all key points, decisions, action items, and mentioned individuals.\n\n<transcript_chunk>\n{chunk}\n</transcript_chunk>"
     )
 }
 
 fn build_combine_summary_user_prompt(combined_text: &str) -> String {
+    let glossary = glossary_instruction_for_summary();
     format!(
-        "{ENGLISH_BASE_SUMMARY_INSTRUCTION}\n\nThe following are consecutive summaries of a meeting. Combine them into a single, coherent, and detailed narrative summary that retains all important details, organized logically.\n\n<summaries>\n{combined_text}\n</summaries>"
+        "{ENGLISH_BASE_SUMMARY_INSTRUCTION}{glossary}\n\nThe following are consecutive summaries of a meeting. Combine them into a single, coherent, and detailed narrative summary that retains all important details, organized logically.\n\n<summaries>\n{combined_text}\n</summaries>"
     )
 }
 
@@ -150,6 +181,7 @@ fn build_final_report_system_prompt(
     section_instructions: &str,
     clean_template_markdown: &str,
 ) -> String {
+    let glossary = glossary_instruction_for_summary();
     format!(
         r#"You are an expert meeting summarizer. Generate a final meeting report by filling in the provided Markdown template based on the source text.
 
@@ -160,7 +192,7 @@ fn build_final_report_system_prompt(
 4. Fill each template section per its instructions.
 5. If a section has no relevant info, write "None noted in this section."
 6. Output **only** the completed Markdown report.
-7. If unsure about something, omit it.
+7. If unsure about something, omit it.{glossary}
 
 **SECTION-SPECIFIC INSTRUCTIONS:**
 {section_instructions}
