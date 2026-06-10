@@ -509,7 +509,10 @@ async fn run_import<R: Runtime>(
 
     // Initialize the appropriate engine
     let whisper_engine = if !use_parakeet && total_segments > 0 {
-        Some(get_or_init_whisper(&app, model.as_deref()).await?)
+        let engine = get_or_init_whisper(&app, model.as_deref()).await?;
+        // New batch job: drop carry-over context from any previous session
+        engine.reset_transcription_context().await;
+        Some(engine)
     } else {
         None
     };

@@ -300,7 +300,10 @@ async fn run_retranscription<R: Runtime>(
 
     // Initialize the appropriate engine once (not per-segment)
     let whisper_engine = if !use_parakeet {
-        Some(get_or_init_whisper(&app, model.as_deref()).await?)
+        let engine = get_or_init_whisper(&app, model.as_deref()).await?;
+        // New batch job: drop carry-over context from any previous session
+        engine.reset_transcription_context().await;
+        Some(engine)
     } else {
         None
     };

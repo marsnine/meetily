@@ -8,6 +8,7 @@ use crate::summary::processor::{
     extract_meeting_name_from_markdown, generate_meeting_summary, language_name_from_code,
 };
 use crate::summary::templates::{self, Template};
+use crate::summary::transcript_correction;
 use crate::ollama::metadata::ModelMetadataCache;
 use serde::{Deserialize, Serialize};
 use sqlx::SqlitePool;
@@ -439,6 +440,31 @@ impl SummaryService {
         // Get app data directory for BuiltInAI provider
         let app_data_dir = _app.path().app_data_dir().ok();
 
+        let client = reqwest::Client::new();
+
+        // Vocabulary-based transcript correction pass: fix residual ASR errors
+        // (misrecognized proper nouns the initial_prompt biasing didn't catch)
+        // before the transcript reaches language detection and summarization.
+        let text = match crate::get_transcription_vocabulary_internal() {
+            Some(vocab) if !vocab.trim().is_empty() => {
+                transcript_correction::correct_transcript_with_vocabulary(
+                    &client,
+                    &provider,
+                    &model_name,
+                    &final_api_key,
+                    &text,
+                    &vocab,
+                    token_threshold,
+                    ollama_endpoint.as_deref(),
+                    custom_openai_endpoint.as_deref(),
+                    app_data_dir.as_ref(),
+                    Some(&cancellation_token),
+                )
+                .await
+            }
+            _ => text,
+        };
+
         if let Some(code) = &summary_language {
             info!("📝 Summary language preference: {}", code);
         }
@@ -504,7 +530,6 @@ impl SummaryService {
             }),
         };
 
-        let client = reqwest::Client::new();
         let result = generate_meeting_summary(
             &client,
             &provider,
