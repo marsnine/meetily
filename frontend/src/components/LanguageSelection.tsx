@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Globe } from 'lucide-react';
+import { invoke } from '@tauri-apps/api/core';
 import Analytics from '@/lib/analytics';
 import { toast } from 'sonner';
 import { useConfig } from '@/contexts/ConfigContext';
@@ -129,6 +130,27 @@ export function LanguageSelection({
 }: LanguageSelectionProps) {
   const [saving, setSaving] = useState(false);
   const { setSelectedLanguage } = useConfig();
+  const [vocabulary, setVocabulary] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('transcriptionVocabulary') || '';
+    }
+    return '';
+  });
+
+  const handleVocabularySave = async () => {
+    try {
+      localStorage.setItem('transcriptionVocabulary', vocabulary);
+      await invoke('set_transcription_vocabulary', { vocabulary });
+      toast.success('Vocabulary saved', {
+        description: 'Transcription will be biased toward these terms'
+      });
+    } catch (error) {
+      console.error('Failed to save transcription vocabulary:', error);
+      toast.error('Failed to save vocabulary', {
+        description: error instanceof Error ? error.message : String(error)
+      });
+    }
+  };
 
   // Parakeet only supports auto-detection (doesn't support manual language selection)
   const isParakeet = provider === 'parakeet';
@@ -228,6 +250,26 @@ export function LanguageSelection({
             </p>
           )}
         </div>
+
+        {/* Custom vocabulary for proper-noun biasing (Whisper only) */}
+        {!isParakeet && (
+          <div className="pt-3 space-y-2">
+            <h4 className="text-sm font-medium text-gray-900">Custom Vocabulary</h4>
+            <p className="text-xs text-gray-600">
+              Comma-separated names and terms used in your meetings (company names, people, jargon).
+              Transcription will be biased toward these spellings.
+            </p>
+            <textarea
+              value={vocabulary}
+              onChange={(e) => setVocabulary(e.target.value)}
+              onBlur={handleVocabularySave}
+              disabled={disabled}
+              rows={3}
+              placeholder="e.g. Acme Ventures, TIPS, 합자조합, 데모데이"
+              className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 resize-y"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

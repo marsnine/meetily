@@ -47,6 +47,9 @@ pub struct WhisperEngine {
     cancel_download_flag: Arc<RwLock<Option<String>>>, // Model name being cancelled
     // Active downloads tracking to prevent concurrent downloads
     active_downloads: Arc<RwLock<HashSet<String>>>, // Set of models currently being downloaded
+    // Rolling tail of the most recent transcript, fed back as initial_prompt so each
+    // chunk decodes with cross-chunk context (helps homophones and proper nouns)
+    context_tail: Arc<RwLock<String>>,
 }
 
 impl WhisperEngine {
@@ -163,6 +166,7 @@ impl WhisperEngine {
             cancel_download_flag: Arc::new(RwLock::new(None)),
             // Initialize active downloads tracking
             active_downloads: Arc::new(RwLock::new(HashSet::new())),
+            context_tail: Arc::new(RwLock::new(String::new())),
         };
         
         Ok(engine)
@@ -512,6 +516,47 @@ impl WhisperEngine {
         repeated_words as f32 / total_words
     }
     
+    /// Build the initial_prompt for whisper.cpp from the user vocabulary (proper-noun
+    /// biasing) and the rolling tail of the previous transcript (cross-chunk context).
+    async fn build_initial_prompt(&self) -> Option<String> {
+        let mut prompt = String::new();
+        if let Some(vocab) = crate::get_transcription_vocabulary_internal() {
+            let vocab = vocab.trim();
+            if !vocab.is_empty() {
+                prompt.push_str(vocab);
+            }
+        }
+        let tail = self.context_tail.read().await;
+        if !tail.is_empty() {
+            if !prompt.is_empty() {
+                prompt.push('\n');
+            }
+            prompt.push_str(&tail);
+        }
+        if prompt.is_empty() {
+            None
+        } else {
+            Some(prompt)
+        }
+    }
+
+    /// Keep roughly the last 200 characters of the latest transcript as context
+    /// for the next chunk's initial_prompt.
+    async fn update_context_tail(&self, text: &str) {
+        if text.is_empty() {
+            return;
+        }
+        let chars: Vec<char> = text.chars().collect();
+        let start = chars.len().saturating_sub(200);
+        *self.context_tail.write().await = chars[start..].iter().collect();
+    }
+
+    /// Clear cross-chunk context. Called when a new transcription session starts so
+    /// context from a previous meeting never leaks into the next one.
+    pub async fn reset_transcription_context(&self) {
+        self.context_tail.write().await.clear();
+    }
+
     /// Transcribe audio with streaming support for partial results and adaptive quality
     pub async fn transcribe_audio_with_confidence(&self, audio_data: Vec<f32>, language: Option<String>) -> Result<(String, f32, bool)> {
         let ctx_lock = self.current_context.read().await;
@@ -576,6 +621,12 @@ impl WhisperEngine {
         let duration_seconds = audio_data.len() as f64 / 16000.0;
         let is_partial = duration_seconds < 15.0; // Consider chunks under 15s as partial
 
+        // Bias decoding toward user vocabulary and recent context
+        let initial_prompt = self.build_initial_prompt().await;
+        if let Some(prompt) = &initial_prompt {
+            params.set_initial_prompt(prompt);
+        }
+
         // PERFORMANCE: Suppress verbose C library logs during transcription
         // This hides whisper_full_with_state debug logs and beam search details
         let (num_segments, state) = {
@@ -588,19 +639,22 @@ impl WhisperEngine {
             (num_segments, state)
             // Suppressor dropped here, stderr restored
         };
-        let mut result = String::new();
+        // Accumulate raw segment bytes and decode UTF-8 once at the end: whisper.cpp can
+        // split multi-byte characters (e.g. Korean) across segment boundaries, so per-segment
+        // string conversion corrupts them into U+FFFD replacement characters.
+        let mut segment_bytes: Vec<u8> = Vec::new();
         let mut total_confidence = 0.0;
         let mut segment_count = 0;
 
         let num_segments = num_segments?;
         for i in 0..num_segments {
-            let segment_text = match state.full_get_segment_text_lossy(i) {
-                Ok(text) => text,
+            let seg = match state.full_get_segment_bytes(i) {
+                Ok(bytes) => bytes,
                 Err(_) => continue,
             };
 
             // Calculate confidence based on segment length and duration (simplified approach)
-            let segment_length = segment_text.len() as f32;
+            let segment_length = seg.len() as f32;
             let segment_confidence = if segment_length > 0.0 {
                 (segment_length / 100.0).min(0.9) + 0.1 // 0.1 to 1.0 confidence based on text length
             } else {
@@ -609,17 +663,12 @@ impl WhisperEngine {
             total_confidence += segment_confidence;
             segment_count += 1;
 
-            let cleaned_text = segment_text.trim();
-            if !cleaned_text.is_empty() {
-                if !result.is_empty() {
-                    result.push(' ');
-                }
-                result.push_str(cleaned_text);
-            }
+            segment_bytes.extend_from_slice(&seg);
         }
 
-        let final_result = result.trim().to_string();
+        let final_result = String::from_utf8_lossy(&segment_bytes).trim().to_string();
         let cleaned_result = Self::clean_repetitive_text(&final_result);
+        self.update_context_tail(&cleaned_result).await;
 
         let avg_confidence = if segment_count > 0 {
             total_confidence / segment_count as f32
@@ -736,6 +785,13 @@ impl WhisperEngine {
             log::info!("Starting transcription #{} of {} samples ({:.1}s duration)",
                       transcription_count, audio_data.len(), duration_seconds);
         }
+
+        // Bias decoding toward user vocabulary and recent context
+        let initial_prompt = self.build_initial_prompt().await;
+        if let Some(prompt) = &initial_prompt {
+            params.set_initial_prompt(prompt);
+        }
+
         let mut state = ctx.create_state()?;
         state.full(params, &audio_data)?;
 
@@ -747,11 +803,14 @@ impl WhisperEngine {
         if (should_log_transcription || num_segments > 0) && (num_segments > 3 || duration_seconds > 5.0) {
             perf_debug!("Transcription #{} completed with {} segments ({:.1}s)", transcription_count, num_segments, duration_seconds);
         }
-        let mut result = String::new();
+        // Accumulate raw segment bytes and decode UTF-8 once at the end: whisper.cpp can
+        // split multi-byte characters (e.g. Korean) across segment boundaries, so per-segment
+        // string conversion corrupts them into U+FFFD replacement characters.
+        let mut segment_bytes: Vec<u8> = Vec::new();
 
         for i in 0..num_segments {
-            let segment_text = match state.full_get_segment_text_lossy(i) {
-                Ok(text) => text,
+            let seg = match state.full_get_segment_bytes(i) {
+                Ok(bytes) => bytes,
                 Err(_) => continue,
             };
 
@@ -763,23 +822,18 @@ impl WhisperEngine {
             // Only log segments for very long audio (>30s) or when explicitly debugging
             if duration_seconds > 30.0 {
                 perf_trace!("Segment {} ({:.2}s-{:.2}s): '{}'",
-                           i, _start_time as f64 / 100.0, _end_time as f64 / 100.0, segment_text);
+                           i, _start_time as f64 / 100.0, _end_time as f64 / 100.0,
+                           String::from_utf8_lossy(&seg));
             }
 
-            // Clean and append segment text
-            let cleaned_text = segment_text.trim();
-            if !cleaned_text.is_empty() {
-                if !result.is_empty() {
-                    result.push(' ');
-                }
-                result.push_str(cleaned_text);
-            }
+            segment_bytes.extend_from_slice(&seg);
         }
 
-        let final_result = result.trim().to_string();
+        let final_result = String::from_utf8_lossy(&segment_bytes).trim().to_string();
 
         // Check for repetition loops and clean them up
         let cleaned_result = Self::clean_repetitive_text(&final_result);
+        self.update_context_tail(&cleaned_result).await;
 
         // Performance optimization: smart logging for transcription results
         if cleaned_result.is_empty() {

@@ -68,6 +68,11 @@ static RECORDING_FLAG: AtomicBool = AtomicBool::new(false);
 static LANGUAGE_PREFERENCE: std::sync::LazyLock<StdMutex<String>> =
     std::sync::LazyLock::new(|| StdMutex::new("auto-translate".to_string()));
 
+// Global transcription vocabulary: user-provided domain terms (company names, jargon)
+// passed to whisper as initial_prompt to bias decoding toward them
+static TRANSCRIPTION_VOCABULARY: std::sync::LazyLock<StdMutex<String>> =
+    std::sync::LazyLock::new(|| StdMutex::new(String::new()));
+
 #[derive(Debug, Deserialize)]
 struct RecordingArgs {
     save_path: String,
@@ -387,6 +392,29 @@ pub fn get_language_preference_internal() -> Option<String> {
     LANGUAGE_PREFERENCE.lock().ok().map(|lang| lang.clone())
 }
 
+#[tauri::command]
+async fn set_transcription_vocabulary(vocabulary: String) -> Result<(), String> {
+    let mut vocab = TRANSCRIPTION_VOCABULARY
+        .lock()
+        .map_err(|e| format!("Failed to set transcription vocabulary: {}", e))?;
+    log_info!("Setting transcription vocabulary ({} chars)", vocabulary.len());
+    *vocab = vocabulary;
+    Ok(())
+}
+
+#[tauri::command]
+async fn get_transcription_vocabulary() -> Result<String, String> {
+    TRANSCRIPTION_VOCABULARY
+        .lock()
+        .map(|vocab| vocab.clone())
+        .map_err(|e| format!("Failed to get transcription vocabulary: {}", e))
+}
+
+// Internal helper function to get transcription vocabulary (for use within Rust code)
+pub fn get_transcription_vocabulary_internal() -> Option<String> {
+    TRANSCRIPTION_VOCABULARY.lock().ok().map(|vocab| vocab.clone())
+}
+
 pub fn run() {
     log::set_max_level(log::LevelFilter::Info);
 
@@ -692,6 +720,8 @@ pub fn run() {
             audio::recording_preferences::get_audio_backend_info,
             // Language preference commands
             set_language_preference,
+            set_transcription_vocabulary,
+            get_transcription_vocabulary,
             // Notification system commands
             notifications::commands::get_notification_settings,
             notifications::commands::set_notification_settings,

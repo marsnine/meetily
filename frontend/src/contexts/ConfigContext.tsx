@@ -222,7 +222,18 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
           console.error('[ConfigContext] Failed to sync language preference to Rust on startup:', err);
         });
     }
-  }, []); 
+    // Sync transcription vocabulary (proper-noun biasing) to Rust on mount
+    const vocabulary = localStorage.getItem('transcriptionVocabulary');
+    if (vocabulary) {
+      invoke('set_transcription_vocabulary', { vocabulary })
+        .then(() => {
+          console.log('[ConfigContext] Synced transcription vocabulary to Rust on startup');
+        })
+        .catch(err => {
+          console.error('[ConfigContext] Failed to sync transcription vocabulary to Rust on startup:', err);
+        });
+    }
+  }, []);
 
   // Load model configuration on mount
   useEffect(() => {

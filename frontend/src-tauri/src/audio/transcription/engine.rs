@@ -215,6 +215,8 @@ pub async fn get_or_init_transcription_engine<R: Runtime>(
         "localWhisper" | _ => {
             info!("🎤 Initializing Whisper transcription engine");
             let whisper_engine = get_or_init_whisper(app).await?;
+            // New session: drop carry-over context from any previous meeting
+            whisper_engine.reset_transcription_context().await;
             Ok(TranscriptionEngine::Whisper(whisper_engine))
         }
     }
