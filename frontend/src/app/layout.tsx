@@ -25,6 +25,7 @@ import { RecordingPostProcessingProvider } from '@/contexts/RecordingPostProcess
 import { ImportAudioDialog, ImportDropOverlay } from '@/components/ImportAudio'
 import { ImportDialogProvider } from '@/contexts/ImportDialogContext'
 import { isAudioExtension, getAudioFormatsDisplayList } from '@/constants/audioFormats'
+import BottomNavBar from '@/components/BottomNavBar'
 
 
 const sourceSans3 = Source_Sans_3({
@@ -254,6 +255,7 @@ export default function RootLayout({
                                 <div className="flex">
                                   <Sidebar />
                                   <MainContent>{children}</MainContent>
+                                  <BottomNavBar />
                                 </div>
                               )}
                               {/* Import audio overlay and dialog */}
