@@ -1,0 +1,28 @@
+[package]
+name = "ios-engine-spike"
+version = "0.1.0"
+edition = "2021"
+
+# Standalone crate — do NOT join the meetily workspace.
+# Purpose: prove whisper-rs (transcription) and llama.cpp (summary) can be
+# linked IN-PROCESS and cross-compiled for the iOS simulator (CPU, no Metal).
+[workspace]
+
+[lib]
+# staticlib so we produce a .a the way an iOS app would embed the engine,
+# rlib so plain `cargo build` checks compile too.
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+llama-cpp-2 = { version = "0.1.150", default-features = false }
+# CPU-only on purpose: Metal compute is unreliable in the iOS Simulator.
+# Real-device builds re-enable metal later.
+whisper-rs = { version = "0.16.0", default-features = false }
+hound = "3.5"
+
+[features]
+# Mirror the device build so host repro can compare CPU vs Metal numerics.
+metal = ["whisper-rs/metal", "llama-cpp-2/metal"]
+
+[profile.release]
+opt-level = 3
