@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Meetily iOS 기술테스트</title>
+    <script type="module" src="/main.js" defer></script>
+  </head>
+  <body>
+    <header class="appbar">
+      <span class="brand">Meetily</span>
+      <span class="tag">오프라인 기술테스트</span>
+    </header>
+
+    <!-- Screen 1: file list -->
+    <section id="screen-files" class="screen active">
+      <h2 class="screen-title">내장 테스트 음성</h2>
+      <p class="hint">파일을 선택하면 온디바이스(오프라인) 실시간 전사가 시작됩니다.</p>
+      <ul id="file-list" class="file-list"></ul>
+      <p id="files-empty" class="muted">음성 파일을 불러오는 중…</p>
+    </section>
+
+    <!-- Screen 2: live transcription -->
+    <section id="screen-transcribe" class="screen">
+      <div class="t-head">
+        <div id="t-filename" class="t-filename"></div>
+        <div class="t-meta">
+          <span class="live-dot"></span> 실시간 전사 · 언어 <span id="t-lang">auto</span>
+        </div>
+      </div>
+      <div class="progress"><div id="t-progress" class="progress-bar"></div></div>
+      <div id="transcript" class="transcript"></div>
+      <div class="actions">
+        <button id="btn-stop" class="btn btn-stop">■ 중지하고 회의록 생성</button>
+      </div>
+    </section>
+
+    <!-- Screen 3: summary -->
+    <section id="screen-summary" class="screen">
+      <h2 class="screen-title">회의록 요약</h2>
+      <div id="summary-status" class="summary-status">
+        <span class="spinner"></span> 내장 Qwen2.5-1.5B로 요약 생성 중… (CPU)
+      </div>
+      <div id="summary" class="summary"></div>
+      <div class="actions">
+        <button id="btn-restart" class="btn btn-secondary" hidden>← 처음으로</button>
+      </div>
+    </section>
+
+    <div id="error-toast" class="toast" hidden></div>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+[package]
+name = "meetily-ios-test"
+version = "0.1.0"
+description = "A Tauri App"
+authors = ["you"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+# Standalone — do not join the parent /Users/michael/Developer/meetily workspace.
+[workspace]
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "meetily_ios_test_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Offline engines, linked IN-PROCESS (no sidecar). CPU by default (simulator);
+# the `metal` feature switches both engines to GPU for on-device builds.
+# whisper-rs 0.16 (whisper-rs-sys 0.15) shares the same ggml ABI as
+# llama-cpp-2 0.1.150, so co-linking both engines no longer clashes at runtime.
+# (0.13.2's older ggml differed → SIGSEGV. Verified fixed via tools/ios-engine-spike.)
+whisper-rs = { version = "0.16.0", default-features = false }
+llama-cpp-2 = { version = "0.1.150", default-features = false }
+hound = "3.5"
+anyhow = "1"
+
+[features]
+# On-device GPU acceleration (Apple Metal) for both engines. Enable with
+# `tauri ios build --features metal` for the iPhone; omit for the CPU simulator.
+metal = ["whisper-rs/metal", "llama-cpp-2/metal"]
+
