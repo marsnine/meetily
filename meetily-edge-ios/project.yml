@@ -1,0 +1,67 @@
+name: MeetilyEdge
+options:
+  bundleIdPrefix: com.michael
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+packages:
+  LiteRTLM:
+    # Vendored copy of the OFFICIAL google-ai-edge/LiteRT-LM Swift API (v0.13.1),
+    # iOS-only, local xcframework. High-level API (Engine/EngineConfig(.gpu)/
+    # Conversation/Message/Content.audioFile). Replaces the community wrapper,
+    # which was pinned to an older C API incompatible with the v0.13.1 GPU
+    # accelerator plugins. The Metal GPU dylibs are bundled separately below.
+    path: vendor/LiteRTLM-official
+targets:
+  MeetilyEdge:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+      - path: Resources/audio
+        buildPhase: resources
+      - path: models/gemma-4-E2B-it.litertlm
+        buildPhase: resources
+      - path: models/gemma-3n-E2B-it-int4.litertlm
+        buildPhase: resources
+    dependencies:
+      - package: LiteRTLM
+        product: LiteRTLM
+      # Official LiteRT-LM v0.13.1 runtime + Metal GPU accelerator plugins
+      # (dlopen'd by CLiteRTLM at runtime from @executable_path/Frameworks).
+      # Embedded but NOT linked; re-signed after build (build_install.sh).
+      - framework: runtime/libLiteRt.dylib
+        embed: true
+        link: false
+        codeSign: true
+      - framework: runtime/libGemmaModelConstraintProvider.dylib
+        embed: true
+        link: false
+        codeSign: true
+      - framework: runtime/libLiteRtMetalAccelerator.dylib
+        embed: true
+        link: false
+        codeSign: true
+      - framework: runtime/libLiteRtTopKMetalSampler.dylib
+        embed: true
+        link: false
+        codeSign: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.michael.meetily-edge
+        DEVELOPMENT_TEAM: PC4J95QKMH
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: MeetilyEdge.entitlements
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "5.0"
+        IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: Meetily Edge
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        NSMicrophoneUsageDescription: 음성 전사 테스트를 위해 마이크 접근이 필요합니다

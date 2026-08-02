@@ -1,0 +1,463 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01A24F28086D3E971B2C7B75 /* en_long.wav in Resources */ = {isa = PBXBuildFile; fileRef = C094BD7913D6A94ED61F9393 /* en_long.wav */; };
+		1F7AABC8F3CE97047D6EC6EF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52789570C51BE8CBA48497DB /* ContentView.swift */; };
+		2743095D97DE16FE7C481BD1 /* LiteRTLM in Frameworks */ = {isa = PBXBuildFile; productRef = BD60BD555441A2CCBCB76A0C /* LiteRTLM */; };
+		2FC131E177A8CDCCC458F532 /* libLiteRtMetalAccelerator.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54F324725616DDC70D064301 /* libLiteRtMetalAccelerator.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		35855CD389DE54889C80E3B9 /* ko_meeting38.wav in Resources */ = {isa = PBXBuildFile; fileRef = F94CF9AF053E3482F9F9B6F8 /* ko_meeting38.wav */; };
+		36D654D915F8616E3EF9AA6A /* Transcriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682EE580BFC68DFA2A8AF85C /* Transcriber.swift */; };
+		41E2B201FD9F22C48310FD14 /* MeetilyEdgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD4C8E35A710F4A0D1F7F91 /* MeetilyEdgeApp.swift */; };
+		421C0E46FE54367977B41368 /* gemma-3n-E2B-it-int4.litertlm in Resources */ = {isa = PBXBuildFile; fileRef = 52F3EE301E924C537C00648B /* gemma-3n-E2B-it-int4.litertlm */; };
+		6D5CAD65D1763F711EB0435F /* ko_sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8B6892AF37FB9BA3634439F1 /* ko_sample.wav */; };
+		723CC37993818129E79FDD66 /* en_meeting.wav in Resources */ = {isa = PBXBuildFile; fileRef = FD926FD50C6DB6795DE6F336 /* en_meeting.wav */; };
+		7B173B33C71A8BAE6D88416D /* libGemmaModelConstraintProvider.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 59E0F51702C5DC61153F064B /* libGemmaModelConstraintProvider.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8597001DD1E5B40562A68AF4 /* AudioChunker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D248EB5672C2AEC51A89E92F /* AudioChunker.swift */; };
+		ABBE1D4B02FFBDB60C0BECD4 /* gemma-4-E2B-it.litertlm in Resources */ = {isa = PBXBuildFile; fileRef = F498E6313D632C7BA747D4E4 /* gemma-4-E2B-it.litertlm */; };
+		B8E81C1F3606E5FC13DD6009 /* ko_long.wav in Resources */ = {isa = PBXBuildFile; fileRef = FF8E8008E55F564ED0664389 /* ko_long.wav */; };
+		C6AF07591C5E9D72D57E08AC /* libLiteRt.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 306A75A1FFAD3A0E3829DF44 /* libLiteRt.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CE56D657185D0E71FD6FA8AF /* libLiteRtTopKMetalSampler.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 62F1FA59070083B582A492AE /* libLiteRtTopKMetalSampler.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EE4D1A131616D99B26933601 /* en_sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = A5CC5EB828B4C79138232A28 /* en_sample.wav */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4A3B26F91CE8A5C4C0DC74BB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C6AF07591C5E9D72D57E08AC /* libLiteRt.dylib in Embed Frameworks */,
+				7B173B33C71A8BAE6D88416D /* libGemmaModelConstraintProvider.dylib in Embed Frameworks */,
+				2FC131E177A8CDCCC458F532 /* libLiteRtMetalAccelerator.dylib in Embed Frameworks */,
+				CE56D657185D0E71FD6FA8AF /* libLiteRtTopKMetalSampler.dylib in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		306A75A1FFAD3A0E3829DF44 /* libLiteRt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libLiteRt.dylib; path = runtime/libLiteRt.dylib; sourceTree = "<group>"; };
+		52789570C51BE8CBA48497DB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		52F3EE301E924C537C00648B /* gemma-3n-E2B-it-int4.litertlm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "gemma-3n-E2B-it-int4.litertlm"; sourceTree = "<group>"; };
+		54F324725616DDC70D064301 /* libLiteRtMetalAccelerator.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libLiteRtMetalAccelerator.dylib; path = runtime/libLiteRtMetalAccelerator.dylib; sourceTree = "<group>"; };
+		5829143FAAD92CED0A9767B4 /* MeetilyEdge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeetilyEdge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		59E0F51702C5DC61153F064B /* libGemmaModelConstraintProvider.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGemmaModelConstraintProvider.dylib; path = runtime/libGemmaModelConstraintProvider.dylib; sourceTree = "<group>"; };
+		62F1FA59070083B582A492AE /* libLiteRtTopKMetalSampler.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libLiteRtTopKMetalSampler.dylib; path = runtime/libLiteRtTopKMetalSampler.dylib; sourceTree = "<group>"; };
+		682EE580BFC68DFA2A8AF85C /* Transcriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcriber.swift; sourceTree = "<group>"; };
+		8B6892AF37FB9BA3634439F1 /* ko_sample.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ko_sample.wav; sourceTree = "<group>"; };
+		9AD4C8E35A710F4A0D1F7F91 /* MeetilyEdgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetilyEdgeApp.swift; sourceTree = "<group>"; };
+		A5CC5EB828B4C79138232A28 /* en_sample.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = en_sample.wav; sourceTree = "<group>"; };
+		C094BD7913D6A94ED61F9393 /* en_long.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = en_long.wav; sourceTree = "<group>"; };
+		D248EB5672C2AEC51A89E92F /* AudioChunker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioChunker.swift; sourceTree = "<group>"; };
+		D3B32E7F6454FF58AC7FDB49 /* LiteRTLM-official */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "LiteRTLM-official"; path = "vendor/LiteRTLM-official"; sourceTree = SOURCE_ROOT; };
+		F498E6313D632C7BA747D4E4 /* gemma-4-E2B-it.litertlm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "gemma-4-E2B-it.litertlm"; sourceTree = "<group>"; };
+		F94CF9AF053E3482F9F9B6F8 /* ko_meeting38.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ko_meeting38.wav; sourceTree = "<group>"; };
+		FD926FD50C6DB6795DE6F336 /* en_meeting.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = en_meeting.wav; sourceTree = "<group>"; };
+		FF8E8008E55F564ED0664389 /* ko_long.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ko_long.wav; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		23B8E8414076A81B89F3440D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2743095D97DE16FE7C481BD1 /* LiteRTLM in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		136822AEEB14732F2F8C2FBA /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				D248EB5672C2AEC51A89E92F /* AudioChunker.swift */,
+				52789570C51BE8CBA48497DB /* ContentView.swift */,
+				9AD4C8E35A710F4A0D1F7F91 /* MeetilyEdgeApp.swift */,
+				682EE580BFC68DFA2A8AF85C /* Transcriber.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		458E142ECFA89F877011415E = {
+			isa = PBXGroup;
+			children = (
+				73E1E622D54BDB3BCF9B561C /* models */,
+				88C98E709B20E7885D1FE558 /* Packages */,
+				CE0076E23A5FB47501AA6461 /* Resources */,
+				136822AEEB14732F2F8C2FBA /* Sources */,
+				5FD3E865ED1E5C12CE078FC8 /* Frameworks */,
+				C8AB8902B2529C4A150C037B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5FD3E865ED1E5C12CE078FC8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				59E0F51702C5DC61153F064B /* libGemmaModelConstraintProvider.dylib */,
+				306A75A1FFAD3A0E3829DF44 /* libLiteRt.dylib */,
+				54F324725616DDC70D064301 /* libLiteRtMetalAccelerator.dylib */,
+				62F1FA59070083B582A492AE /* libLiteRtTopKMetalSampler.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		73E1E622D54BDB3BCF9B561C /* models */ = {
+			isa = PBXGroup;
+			children = (
+				52F3EE301E924C537C00648B /* gemma-3n-E2B-it-int4.litertlm */,
+				F498E6313D632C7BA747D4E4 /* gemma-4-E2B-it.litertlm */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		88C98E709B20E7885D1FE558 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				D3B32E7F6454FF58AC7FDB49 /* LiteRTLM-official */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		AFED76C9D1030479F336973E /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				C094BD7913D6A94ED61F9393 /* en_long.wav */,
+				FD926FD50C6DB6795DE6F336 /* en_meeting.wav */,
+				A5CC5EB828B4C79138232A28 /* en_sample.wav */,
+				FF8E8008E55F564ED0664389 /* ko_long.wav */,
+				F94CF9AF053E3482F9F9B6F8 /* ko_meeting38.wav */,
+				8B6892AF37FB9BA3634439F1 /* ko_sample.wav */,
+			);
+			path = audio;
+			sourceTree = "<group>";
+		};
+		C8AB8902B2529C4A150C037B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5829143FAAD92CED0A9767B4 /* MeetilyEdge.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CE0076E23A5FB47501AA6461 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AFED76C9D1030479F336973E /* audio */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		39E17EE0CDAC3CC62299E6D4 /* MeetilyEdge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8414C1B955026681FC47AAC0 /* Build configuration list for PBXNativeTarget "MeetilyEdge" */;
+			buildPhases = (
+				2D55D15A03C9382FF1823BCA /* Sources */,
+				02DCCAF168DB14A593A979AE /* Resources */,
+				23B8E8414076A81B89F3440D /* Frameworks */,
+				4A3B26F91CE8A5C4C0DC74BB /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MeetilyEdge;
+			packageProductDependencies = (
+				BD60BD555441A2CCBCB76A0C /* LiteRTLM */,
+			);
+			productName = MeetilyEdge;
+			productReference = 5829143FAAD92CED0A9767B4 /* MeetilyEdge.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		48818F80989FF3575A052745 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					39E17EE0CDAC3CC62299E6D4 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 097507D4ECD0517356DF3F8D /* Build configuration list for PBXProject "MeetilyEdge" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 458E142ECFA89F877011415E;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E948C14C2EE3B8B01CB592EC /* XCLocalSwiftPackageReference "vendor/LiteRTLM-official" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C8AB8902B2529C4A150C037B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				39E17EE0CDAC3CC62299E6D4 /* MeetilyEdge */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		02DCCAF168DB14A593A979AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01A24F28086D3E971B2C7B75 /* en_long.wav in Resources */,
+				723CC37993818129E79FDD66 /* en_meeting.wav in Resources */,
+				EE4D1A131616D99B26933601 /* en_sample.wav in Resources */,
+				421C0E46FE54367977B41368 /* gemma-3n-E2B-it-int4.litertlm in Resources */,
+				ABBE1D4B02FFBDB60C0BECD4 /* gemma-4-E2B-it.litertlm in Resources */,
+				B8E81C1F3606E5FC13DD6009 /* ko_long.wav in Resources */,
+				35855CD389DE54889C80E3B9 /* ko_meeting38.wav in Resources */,
+				6D5CAD65D1763F711EB0435F /* ko_sample.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2D55D15A03C9382FF1823BCA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8597001DD1E5B40562A68AF4 /* AudioChunker.swift in Sources */,
+				1F7AABC8F3CE97047D6EC6EF /* ContentView.swift in Sources */,
+				41E2B201FD9F22C48310FD14 /* MeetilyEdgeApp.swift in Sources */,
+				36D654D915F8616E3EF9AA6A /* Transcriber.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		381DBFA8541F9A1F1EF77540 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B278DDDE171F9EACBAF1B6EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D53D53A0A9A5F887DABAA0C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MeetilyEdge.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PC4J95QKMH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"runtime\"",
+				);
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.michael.meetily-edge";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		DD747F957DE33467D9333117 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MeetilyEdge.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PC4J95QKMH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"runtime\"",
+				);
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.michael.meetily-edge";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		097507D4ECD0517356DF3F8D /* Build configuration list for PBXProject "MeetilyEdge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B278DDDE171F9EACBAF1B6EB /* Debug */,
+				381DBFA8541F9A1F1EF77540 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8414C1B955026681FC47AAC0 /* Build configuration list for PBXNativeTarget "MeetilyEdge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD747F957DE33467D9333117 /* Debug */,
+				D53D53A0A9A5F887DABAA0C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E948C14C2EE3B8B01CB592EC /* XCLocalSwiftPackageReference "vendor/LiteRTLM-official" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "vendor/LiteRTLM-official";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BD60BD555441A2CCBCB76A0C /* LiteRTLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiteRTLM;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 48818F80989FF3575A052745 /* Project object */;
+}
